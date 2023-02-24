@@ -1,0 +1,48 @@
+import Redis from 'redis';
+
+export class Cache {
+
+    public redisClient = Redis.createClient()
+
+
+    getCacheData = async (_id) => {
+        try {
+            await this.redisClient.connect();
+            const cacheData = await this.redisClient.GET(`cacheData.${_id}`);
+            console.log("Cache Hit");
+            return cacheData;
+        } catch (error) {
+            return error;
+        } finally {
+            this.redisClient.quit();
+        }
+    };
+    
+    setCacheData = async (_id, newCacheData) => {
+        try {
+            await this.redisClient.connect();
+            const cacheData = await this.redisClient.SET(`cacheData.${_id}`, JSON.stringify(newCacheData));
+            await this.redisClient.expire(`cacheData.${_id}`,24*60*60);
+            console.log("Cache Miss And Set");
+            return cacheData;
+        } catch (error) {
+            return error;
+        } finally {
+            this.redisClient.quit();
+        }
+    };
+    
+    deleteCacheData = async (_id) => {
+        try {
+            await this.redisClient.connect();
+            await this.redisClient.DEL(`cacheData.${_id}`);
+            console.log("Delete Cache");
+        } catch (error) {
+            return error;
+        }finally{
+            this.redisClient.quit();
+        }
+    };
+    
+}
+
