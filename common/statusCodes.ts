@@ -1,15 +1,17 @@
+import { Response } from 'express';
+
 export class StatusCode {
 
     //  Status Codes
 
-    error = (res, statusCode, errors) => {
+    error = (res:Response, statusCode:number, errors:any) => {
         return res.status(statusCode).json({
             statusCode: statusCode,
             Message: errors.message || errors,
         });
     };
 
-    success = (res, statusCode, data) => {
+    success = (res:Response, statusCode:number, data:any) => {
         const key = res.req.route.path;
         return res.status(statusCode).json({
             statusCode: statusCode,

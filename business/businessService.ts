@@ -5,7 +5,7 @@ import businessModel from "../models/businessModel";
 export class BusinessService {
     
     //get business
-    getBusinessData = async (condition:any) => {
+    getBusinessData = async (condition:Object) => {
         try {
             const data = await businessModel.findOne(condition).select("+password");       
             // .select is use to set password when in schema its select false`

@@ -1,6 +1,6 @@
 // null check function
 
-exports.data = (data) => {
+export const checkData = (data) => {
     if (data == null) {
         return null;
     } else if (data._doc) {

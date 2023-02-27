@@ -1,9 +1,9 @@
-const jwt = require('jsonwebtoken');
-const env = require("../common/env");
+import jwt from 'jsonwebtoken';
+import env from "./env";
 
 
 // jwt token
-exports.tokenJwt = (Business) => {
+export const tokenJwt = (Business:any) => {
     const tokenData = {
         _id: Business._id,
         role: Business.role,
