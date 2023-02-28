@@ -13,7 +13,7 @@ export class Business implements routes {
     this.auth = new Auth();
   }
 
-  public businessRoute(): void {
+  public inRoute(): void {
     this.router.get('/business', this.auth.authOfBusiness, this.businessController.businessDetails);
 
     this.router.get('/list', this.auth.authOfBusiness, this.businessController.businessList);

@@ -18,7 +18,7 @@ export const statusSuccess = (res: Response, statusCode: number, data: any) => {
 
 // const code = {
 //   401: 'Unauthorized',
-//   '200': 'success',
+//   200: 'success',
 //   201: 'created',
 //   400: 'Bad Request',
 //   403: 'Already Exits',

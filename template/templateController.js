@@ -5,18 +5,18 @@ const status = require("../common/indexOfCommon");
 const template = require("../common/findTemplate");
 
 //  Read Template
-exports.readTemplate = async (req, res) => {
+exports.readTemplate = async (req:Request, res:Response) => {
     try {
         const condition = await template.findTemplate(req);
         const readTemplate = await templateService.readTemplate(condition);
-        return status.success(res, "200", readTemplate);
+        return statusSuccess(res, "200", readTemplate);
     } catch (error) {
-        return status.error(res, "500", error);
+        return statusError(res, "500", error);
     };
 };
 
 //  Add Template
-exports.addTemplate = async (req, res) => {
+exports.addTemplate = async (req:Request, res:Response) => {
     try {
         const { template, category } = req.body;
         const massage = filter.clean(template);
@@ -26,27 +26,27 @@ exports.addTemplate = async (req, res) => {
             businessId: req.business._id,
         };
         const createdTemplate = await templateService.addTemplate(templateData);
-        return status.success(res, "201", createdTemplate);
+        return statusSuccess(res, "201", createdTemplate);
     } catch (error) {
-        return status.error(res, "500", error);
+        return statusError(res, "500", error);
     };
 };
 
 //  Update Template
-exports.updateTemplate = async (req, res) => {
+exports.updateTemplate = async (req:Request, res:Response) => {
     try {
         const businessId = req.business._id;
         const { _id, category, template } = req.query;
         const updatedAt = new Date();
         const updatedTemplate = await templateService.updateTemplate(_id, businessId, category, template, updatedAt);
-        return status.success(res, "200", updatedTemplate);
+        return statusSuccess(res, "200", updatedTemplate);
     } catch (error) {
-        return status.error(res, "500", error);
+        return statusError(res, "500", error);
     };
 };
 
 //  Delete Template
-exports.deleteTemplate = async (req, res) => {
+exports.deleteTemplate = async (req:Request, res:Response) => {
     try {
         const _id = req.query._id;
         const businessId = req.business._id;
@@ -54,8 +54,8 @@ exports.deleteTemplate = async (req, res) => {
             $and: [{ businessId }, { _id }]
         }
         await templateService.deleteTemplate(condition);
-        return status.success(res, "200", "Deleted Successfully")
+        return statusSuccess(res, "200", "Deleted Successfully")
     } catch (error) {
-        return status.error(res, "500", error);
+        return statusError(res, "500", error);
     };
 };

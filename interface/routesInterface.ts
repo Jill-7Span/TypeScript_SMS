@@ -1,3 +1,3 @@
 export interface routes {
-  businessRoute(): any;
+  inRoute(): any;
 }
