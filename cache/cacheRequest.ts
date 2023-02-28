@@ -5,7 +5,7 @@ export class Cache {
     public redisClient = Redis.createClient()
 
 
-    getCacheData = async (_id) => {
+    getCacheData = async (_id:String) => {
         try {
             await this.redisClient.connect();
             const cacheData = await this.redisClient.GET(`cacheData.${_id}`);
