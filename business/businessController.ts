@@ -2,21 +2,18 @@ import { Request, Response } from 'express';
 import { genSalt, hash, compare } from 'bcrypt';
 import { BusinessService } from './businessService';
 import { Cache } from '../cache/cacheRequest';
-import { StatusCode, tokenJwt } from '../common/indexOfCommon';
-import { BusinessList } from '../helper/indexOfHelper';
+import { statusError, statusSuccess } from '../common/statusCodes';
+import { tokenJwt } from '../common/jwtCommon';
+import { businessData, getBusinessList } from '../helper/businessList';
 import { businessModel } from '../models/businessModel';
 
 export class BusinessController {
   public cache: Cache;
-  public statusCode: StatusCode;
   public businessService: BusinessService;
-  public getBusinessList: BusinessList;
 
   constructor() {
     this.cache = new Cache();
-    this.statusCode = new StatusCode();
     this.businessService = new BusinessService();
-    this.getBusinessList = new BusinessList();
   }
 
   // get business
@@ -25,14 +22,14 @@ export class BusinessController {
       const businessId: string = typeof req.query.id === 'string' ? req.query.id : '';
       const businessCacheData: any = await this.cache.getCacheData(businessId);
       if (businessCacheData != null) {
-        return this.statusCode.success(res, 200, JSON.parse(businessCacheData));
+        return statusSuccess(res, 200, JSON.parse(businessCacheData));
       } else {
         const existingBusiness = await this.businessService.getBusinessData({ _id: businessId });
         await this.cache.setCacheData(businessId, existingBusiness);
-        return this.statusCode.success(res, 200, existingBusiness);
+        return statusSuccess(res, 200, existingBusiness);
       }
     } catch (error: any) {
-      return this.statusCode.error(res, 500, error);
+      return error(res, 500, error);
     }
   };
 
@@ -40,11 +37,11 @@ export class BusinessController {
   public businessList = async (req: Request, res: Response) => {
     try {
       const { emailSearch, numberSearch, size, page }: any = req.query;
-      const condition = this.getBusinessList.getBusinessList(emailSearch, numberSearch, size, page);
+      const condition = getBusinessList(emailSearch, numberSearch, size, page);
       const business = await this.businessService.getBusinessList(condition);
-      return this.statusCode.success(res, 200, business);
+      return statusSuccess(res, 200, business);
     } catch (error) {
-      return this.statusCode.error(res, 500, error);
+      return statusError(res, 500, error);
     }
   };
 
@@ -52,7 +49,7 @@ export class BusinessController {
   public businessSignUp = async (req: Request, res: Response) => {
     const bodyData: any = req.body;
     try {
-      const condition = this.getBusinessList.businessData(bodyData);
+      const condition = businessData(bodyData);
       const existingBusiness = await this.businessService.getBusinessData(condition);
       if (!existingBusiness) {
         if (bodyData.password === bodyData.confirmPassword) {
@@ -63,15 +60,15 @@ export class BusinessController {
           await this.cache.setCacheData(newBusiness._id, newBusiness);
           const token = tokenJwt(newBusiness);
           const newBusinessDetail = { ...newBusiness, token };
-          return this.statusCode.success(res, 201, newBusinessDetail);
+          return statusSuccess(res, 201, newBusinessDetail);
         } else {
-          return this.statusCode.error(res, 403, "Password Didn't Match");
+          return statusError(res, 403, "Password Didn't Match");
         }
       } else {
-        return this.statusCode.error(res, 403, 'User Already Exits');
+        return statusError(res, 403, 'User Already Exits');
       }
     } catch (error) {
-      return this.statusCode.error(res, 500, error);
+      return statusError(res, 500, error);
     }
   };
 
@@ -80,7 +77,7 @@ export class BusinessController {
     try {
       const { password, email }: any = req.body;
       const business = await this.businessService.getBusinessData({ email });
-      if (!business) return this.statusCode.error(res, 403, 'Invalid Details');
+      if (!business) return statusError(res, 403, 'Invalid Details');
 
       const businessData = {
         firstName: business.firstName,
@@ -91,15 +88,15 @@ export class BusinessController {
         const passwordCompare = await compare(password, businessPassword);
         if (passwordCompare) {
           const token = tokenJwt(business);
-          return this.statusCode.success(res, 200, { ...businessData, token });
+          return statusSuccess(res, 200, { ...businessData, token });
         } else {
-          return this.statusCode.error(res, 401, 'Invalid Details');
+          return statusError(res, 401, 'Invalid Details');
         }
       } else {
-        return this.statusCode.error(res, 401, 'Invalid Details');
+        return statusError(res, 401, 'Invalid Details');
       }
     } catch (error) {
-      return this.statusCode.error(res, 500, error);
+      return statusError(res, 500, error);
     }
   };
 
@@ -110,7 +107,7 @@ export class BusinessController {
       const tokenId = req.business._id;
       const existingBusinessData = await this.businessService.getBusinessData({ _id: tokenId });
       let update: Partial<businessModel> = {};
-      const condition = this.getBusinessList.businessData(bodyData);
+      const condition = businessData(bodyData);
       const existingContactNumberOrEmail = await this.businessService.getBusinessList(condition);
 
       if (req.body.hasOwnProperty('contactNumber') || req.body.hasOwnProperty('email')) {
@@ -121,10 +118,10 @@ export class BusinessController {
           for (let i = 0; i < existingContactNumberOrEmail.length; i++) {
             const element = existingContactNumberOrEmail[i];
             if (element._id != tokenId && element.contactNumber === parseInt(bodyData.contactNumber)) {
-              return this.statusCode.error(res, 403, 'Number Already exits');
+              return statusError(res, 403, 'Number Already exits');
             }
             if (element._id != tokenId && element.email === bodyData.email) {
-              return this.statusCode.error(res, 403, 'Email Already exits');
+              return statusError(res, 403, 'Email Already exits');
             }
           }
         }
@@ -133,9 +130,9 @@ export class BusinessController {
       const updatedData = await this.businessService.updateBusiness(existingBusinessData._id, update);
       await this.cache.setCacheData(updatedData._id, updatedData);
       const token = tokenJwt(updatedData);
-      return this.statusCode.success(res, 200, { ...updatedData, token });
+      return statusSuccess(res, 200, { ...updatedData, token });
     } catch (error) {
-      return this.statusCode.error(res, 500, error);
+      return statusError(res, 500, error);
     }
   };
 
@@ -149,7 +146,7 @@ export class BusinessController {
         const business = await this.businessService.getBusinessData({ where: { email } });
         compare(oldPassword, business.password, async (error, data) => {
           if (error) {
-            return this.statusCode.error(res, 400, error);
+            return statusError(res, 400, error);
           }
           if (data) {
             const salt = await genSalt(10);
@@ -158,14 +155,14 @@ export class BusinessController {
             await this.businessService.updateBusiness(business._id, update);
             return update;
           } else {
-            return this.statusCode.error(res, 401, 'Incorrect Credentials');
+            return statusError(res, 401, 'Incorrect Credentials');
           }
         });
       } else {
-        return this.statusCode.error(res, 401, 'Invalid Details');
+        return statusError(res, 401, 'Invalid Details');
       }
     } catch (error) {
-      return this.statusCode.error(res, 500, error);
+      return statusError(res, 500, error);
     }
   };
 
@@ -175,9 +172,9 @@ export class BusinessController {
       const _id = req.business._id;
       await this.businessService.deleteBusiness(_id);
       await this.cache.deleteCacheData(_id);
-      return this.statusCode.error(res, 200, 'Deleted');
+      return statusError(res, 200, 'Deleted');
     } catch (error) {
-      return this.statusCode.error(res, 500, error);
+      return statusError(res, 500, error);
     }
   };
 }

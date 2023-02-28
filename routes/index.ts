@@ -25,7 +25,7 @@ export class Routes {
   }
   route() {
     // Routes
-    this.router.use("/business", this.business.a);
+    this.router.use("/business", this.business.businessRoute);
 
     this.router.use("/contacts", contacts);
 
@@ -37,6 +37,4 @@ export class Routes {
 
     this.router.use("/tags", tags);
   }
-}
-
-module.exports = router;
+};
