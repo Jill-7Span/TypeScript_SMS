@@ -14,7 +14,7 @@ export interface businessModel {
   country:String;
   createdAt:any;
   updatedAt:any;
-}
+};
 
 const businessModel = new mongoose.Schema({
   firstName: {
