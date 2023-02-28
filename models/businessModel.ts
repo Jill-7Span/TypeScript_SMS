@@ -1,5 +1,20 @@
 import mongoose from "mongoose";
-const { Schema } = mongoose;
+// const { Schema } = mongoose;
+
+export interface businessModel {
+  _id:String;
+  firstName:String;
+  lastName:String;
+  contactNumber:Number;
+  email:String;
+  password:String;
+  company:String;
+  city:String;
+  state:String;
+  country:String;
+  createdAt:any;
+  updatedAt:any;
+}
 
 const businessModel = new mongoose.Schema({
   firstName: {
@@ -58,4 +73,4 @@ const businessModel = new mongoose.Schema({
 });
 const BusinessModel = mongoose.model("business", businessModel);
 
-module.exports = BusinessModel;
+export {BusinessModel};

@@ -2,8 +2,9 @@ import { Request, Response } from 'express';
 import { genSalt, hash, compare } from 'bcrypt';
 import { BusinessService } from './businessService';
 import { Cache } from '../cache/cacheRequest';
-import { StatusCode ,tokenJwt  } from '../common/indexOfCommon';
+import { StatusCode, tokenJwt } from '../common/indexOfCommon';
 import { BusinessList } from '../helper/indexOfHelper';
+import { businessModel } from '../models/businessModel';
 
 export class BusinessController {
   public cache: Cache;
@@ -21,16 +22,16 @@ export class BusinessController {
   // get business
   public businessDetails = async (req: Request, res: Response) => {
     try {
-      const businessId: string = typeof req.query.id === "string" ? req.query.id : "";
-      const businessCacheData:any = await this.cache.getCacheData(businessId);
+      const businessId: string = typeof req.query.id === 'string' ? req.query.id : '';
+      const businessCacheData: any = await this.cache.getCacheData(businessId);
       if (businessCacheData != null) {
-        return this.statusCode.success(res, 200 , JSON.parse(businessCacheData));
+        return this.statusCode.success(res, 200, JSON.parse(businessCacheData));
       } else {
         const existingBusiness = await this.businessService.getBusinessData({ _id: businessId });
         await this.cache.setCacheData(businessId, existingBusiness);
         return this.statusCode.success(res, 200, existingBusiness);
       }
-    } catch (error:any) {
+    } catch (error: any) {
       return this.statusCode.error(res, 500, error);
     }
   };
@@ -108,7 +109,7 @@ export class BusinessController {
       const bodyData = req.body;
       const tokenId = req.business._id;
       const existingBusinessData = await this.businessService.getBusinessData({ _id: tokenId });
-      let update = {};
+      let update: Partial<businessModel> = {};
       const condition = this.getBusinessList.businessData(bodyData);
       const existingContactNumberOrEmail = await this.businessService.getBusinessList(condition);
 
@@ -143,7 +144,7 @@ export class BusinessController {
     try {
       const email = req.business.email;
       const { oldPassword, newPassword, confirmPassword }: any = req.body;
-      const update: = {};
+      const update: Partial<businessModel> = {};
       if (newPassword === confirmPassword) {
         const business = await this.businessService.getBusinessData({ where: { email } });
         compare(oldPassword, business.password, async (error, data) => {
@@ -153,9 +154,9 @@ export class BusinessController {
           if (data) {
             const salt = await genSalt(10);
             update.password = await hash(newPassword, salt);
-            update.updated_at = new Date();
+            update.updatedAt = new Date();
             await this.businessService.updateBusiness(business._id, update);
-            return updated;
+            return update;
           } else {
             return this.statusCode.error(res, 401, 'Incorrect Credentials');
           }
