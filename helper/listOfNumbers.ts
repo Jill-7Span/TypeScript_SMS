@@ -2,7 +2,7 @@ import { Tags } from '../tag/tagService';
 
 const tags = new Tags();
 
-export const listOfNumber = async (searchTags: String, businessId: String) => {
+export const listOfNumbers = async (searchTags: String, businessId: String) => {
   try {
     const tagId = await tags.findTags(searchTags, businessId);
     let condition = {};

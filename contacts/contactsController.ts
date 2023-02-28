@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import { ContactService } from './contactsService';
 import { Tags } from '../tag/tagService';
 import { statusError, statusSuccess } from '../common/statusCodes';
-import { listOfNumber } from '../helper/findContacts';
+import { listOfNumbers } from '../helper/listOfNumbers';
 import { csvToJson } from '../helper/csvToJson';
 import { Cache } from '../cache/cacheRequest';
 
