@@ -25,7 +25,7 @@ export class Routes {
   }
   route() {
     // Routes
-    this.router.use("/business", this.business.businessRoute);
+    this.router.use("/business", this.business.inRoute);
 
     this.router.use("/contacts", contacts);
 

@@ -9,7 +9,7 @@ const authToken = "d55d0c4dd3d49ae4976ee1fbe98eb5bb"
 
 const client = require('twilio')(accountSid, authToken);
 
-exports.sendSms = async (req, res) => {
+exports.sendSms = async (req:Request, res:Response) => {
     try {
         const businessId = req.business._id;
         const { searchTags } = req.body;
@@ -22,14 +22,14 @@ exports.sendSms = async (req, res) => {
             message: smsTemplate[0].template,
             number: numberList
         };
-        return status.success(res, "200", smsDetails)
+        return statusSuccess(res, "200", smsDetails)
     } catch (error) {
         return error;
     }
 };
 
 
-exports.test = async (req, res) => {
+exports.test = async (req:Request, res:Response) => {
     try {
         const sms = await client.messages.create({
             to:["+919722030839"],
@@ -45,7 +45,7 @@ exports.test = async (req, res) => {
 }
 
 
-// exports.test = async (req, res) => {
+// exports.test = async (req:Request, res:Response) => {
 //     try {
 
 //         const  notification = {
