@@ -1,5 +1,5 @@
-const nullCheck = require("../common/nullChecK");
-const tagsModel = require("../models/tagsModel");
+import nullCheck from "../common/nullChecK";
+import tagsModel from "../models/tagsModel";
 
 export class Tags {
 

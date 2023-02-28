@@ -1,9 +1,10 @@
 // insert business
+import { Request, Response ,NextFunction } from 'express';
 import { object, string as _string } from 'joi';
 import { sanitize } from "string-sanitizer";
-import { error as this.statusCode.error } from "../common/statusCodes";
+import { statusError } from "../common/statusCodes";
 
-export const signUpBusiness = (req, res, next) => {
+export const signUpBusiness = (req:Request, res:Response, next:NextFunction) => {
     const validation = object({
         firstName: _string().required(),
         lastName: _string().required(),
@@ -19,7 +20,7 @@ export const signUpBusiness = (req, res, next) => {
         .unknown(false);//.unknown(true)
     const { error } = validation.validate(req.body, { abortEarly: false });
     if (error) {
-        return this.statusCode.error(res,"400",error);
+        return statusError(res,400,error);
     } else {
         const bodyData = req.body;
         bodyData.firstName = sanitize.removeNumber(bodyData.firstName);
