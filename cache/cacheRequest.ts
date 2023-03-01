@@ -18,7 +18,7 @@ export class Cache {
         }
     };
     
-    setCacheData = async (_id, newCacheData) => {
+    setCacheData = async (_id:String, newCacheData:Object) => {
         try {
             await this.redisClient.connect();
             const cacheData = await this.redisClient.SET(`cacheData.${_id}`, JSON.stringify(newCacheData));
@@ -32,7 +32,7 @@ export class Cache {
         }
     };
     
-    deleteCacheData = async (_id) => {
+    deleteCacheData = async (_id:String) => {
         try {
             await this.redisClient.connect();
             await this.redisClient.DEL(`cacheData.${_id}`);

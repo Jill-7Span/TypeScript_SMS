@@ -8,19 +8,13 @@ import { businessData, getBusinessList } from '../helper/businessList';
 import { businessModel } from '../models/businessModel';
 
 export class BusinessController {
-  public cache: Cache;
-  public businessService: BusinessService;
-
-  constructor() {
-    this.cache = new Cache();
-    this.businessService = new BusinessService();
-  }
+  constructor(public cache: Cache, public businessService: BusinessService) {}
 
   // get business
   public businessDetails = async (req: Request, res: Response) => {
     try {
-      const businessId: string = typeof req.query.id === 'string' ? req.query.id : '';
-      const businessCacheData: any = await this.cache.getCacheData(businessId);
+      const businessId: String = typeof req.query.id === 'string' ? req.query.id : '';
+      const businessCacheData: string | null | undefined = await this.cache.getCacheData(businessId) as string | null | undefined;
       if (businessCacheData != null) {
         return statusSuccess(res, 200, JSON.parse(businessCacheData));
       } else {
@@ -29,14 +23,14 @@ export class BusinessController {
         return statusSuccess(res, 200, existingBusiness);
       }
     } catch (error: any) {
-      return error(res, 500, error);
+      return statusError(res, 500, error);
     }
   };
 
   // get Business
   public businessList = async (req: Request, res: Response) => {
     try {
-      const { emailSearch, numberSearch, size, page }: any = req.query;
+      const { emailSearch, numberSearch, size, page } =  req.query;
       const condition = getBusinessList(emailSearch, numberSearch, size, page);
       const business = await this.businessService.getBusinessList(condition);
       return statusSuccess(res, 200, business);
@@ -47,14 +41,14 @@ export class BusinessController {
 
   //  Sign Up
   public businessSignUp = async (req: Request, res: Response) => {
-    const bodyData: any = req.body;
+    const bodyData:businessModel = req.body;
     try {
-      const condition = businessData(bodyData);
+      const condition: Object = businessData(bodyData);
       const existingBusiness = await this.businessService.getBusinessData(condition);
       if (!existingBusiness) {
         if (bodyData.password === bodyData.confirmPassword) {
           const salt = await genSalt(10);
-          bodyData.password = await hash(bodyData.password, salt);
+          bodyData.password = await hash(bodyData.password as string, salt);
           const newBusiness = await this.businessService.creteBusiness(bodyData);
           delete newBusiness.password;
           await this.cache.setCacheData(newBusiness._id, newBusiness);
@@ -75,7 +69,7 @@ export class BusinessController {
   // log in
   public businessLogIn = async (req: Request, res: Response) => {
     try {
-      const { password, email }: any = req.body;
+      const { password, email }: Partial<businessModel> = req.body;
       const business = await this.businessService.getBusinessData({ email });
       if (!business) return statusError(res, 403, 'Invalid Details');
 
@@ -85,7 +79,7 @@ export class BusinessController {
       };
       if (business) {
         const businessPassword = business.password;
-        const passwordCompare = await compare(password, businessPassword);
+        const passwordCompare = await compare(password as string, businessPassword);
         if (passwordCompare) {
           const token = tokenJwt(business);
           return statusSuccess(res, 200, { ...businessData, token });
@@ -108,7 +102,7 @@ export class BusinessController {
       const existingBusinessData = await this.businessService.getBusinessData({ _id: tokenId });
       let update: Partial<businessModel> = {};
       const condition = businessData(bodyData);
-      const existingContactNumberOrEmail = await this.businessService.getBusinessList(condition);
+      const existingContactNumberOrEmail:any = await this.businessService.getBusinessList(condition);
 
       if (req.body.hasOwnProperty('contactNumber') || req.body.hasOwnProperty('email')) {
         if (existingContactNumberOrEmail.length == 0 || existingContactNumberOrEmail[0]._id === tokenId) {

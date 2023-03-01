@@ -1,8 +1,8 @@
-import { Tags } from '../tag/tagService';
+import { TagService } from '../tag/tagService';
 
-const tags = new Tags();
+const tags = new TagService();
 
-export const listOfNumbers = async (searchTags: String, businessId: String) => {
+export const listOfNumbers = async (searchTags: string, businessId: string) => {
   try {
     const tagId = await tags.findTags(searchTags, businessId);
     let condition = {};

@@ -8,6 +8,7 @@ export interface businessModel {
   contactNumber:Number;
   email:String;
   password:String;
+  confirmPassword?:String;
   company:String;
   city:String;
   state:String;

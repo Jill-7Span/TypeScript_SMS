@@ -39,7 +39,7 @@ export class ContactController {
     try {
       const businessId = req.business._id;
       const { searchTags } = req.query;
-      const condition = await listOfNumber(searchTags, businessId);
+      const condition = await listOfNumbers(searchTags, businessId);
       const allContacts = await this.contactService.allContacts(condition);
       return statusSuccess(res, 200, allContacts);
     } catch (error) {

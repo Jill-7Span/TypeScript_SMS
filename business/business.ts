@@ -1,17 +1,11 @@
 import express from 'express';
 import { BusinessController } from './businessController';
-import { Auth ,loginBusiness, signUpBusiness, updateBusiness } from '../middleware/indexOfMiddleware'
+import { Auth, loginBusiness, signUpBusiness, updateBusiness } from '../middleware/indexOfMiddleware';
 import { routes } from '../interface/routesInterface';
 
 export class Business implements routes {
-  public router = express.Router();
-  public businessController: BusinessController;
-  public auth: Auth;
-
-  constructor() {
-    this.businessController = new BusinessController();
-    this.auth = new Auth();
-  }
+  
+  constructor(public router = express.Router(), public businessController: BusinessController, public auth: Auth) {}
 
   public inRoute(): void {
     this.router.get('/business', this.auth.authOfBusiness, this.businessController.businessDetails);
