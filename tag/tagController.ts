@@ -13,7 +13,7 @@ export class TagController {
   findTags = async (req: Request, res: Response) => {
     try {
       const businessId = req.business._id;
-      const tagName = req.query.tagName;
+      const tagName:any = req.query.tagName;
       const tagData = await this.tagService.findTags(tagName, businessId);
       return statusSuccess(res, 200, tagData);
     } catch (error) {
@@ -52,7 +52,7 @@ export class TagController {
   //  Delete Tags
   deleteTag = async (req: Request, res: Response) => {
     try {
-      const _id = req.query._id;
+      const _id:any = req.query._id;
       const deletedTag = await this.tagService.deleteTag(_id);
       return statusSuccess(res, 200, `Deleted Successfully ${deletedTag.tag}`);
     } catch (error) {
