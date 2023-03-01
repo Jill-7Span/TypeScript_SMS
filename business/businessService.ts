@@ -1,5 +1,4 @@
 import { checkData } from '../common/nullChecK';
-// import businessCache from "../cache/cacheRequest";
 import { BusinessModel } from '../models/businessModel';
 
 export class BusinessService {
@@ -28,7 +27,6 @@ export class BusinessService {
   creteBusiness = async (data: any) => {
     try {
       const newBusinessData = await BusinessModel.create(data);
-      // await businessCache.setCacheData(newBusinessData.dataValues._id, newBusinessData.dataValues);
       return checkData(newBusinessData);
     } catch (error) {
       return error;
@@ -39,7 +37,6 @@ export class BusinessService {
   updateBusiness = async (_id: any, update: any) => {
     try {
       const data = await BusinessModel.findOneAndUpdate({ _id }, { $set: update }, { returnDocument: 'after' });
-      // await businessCache.setCacheData(data.dataValues._id, data.dataValues);
       return checkData(data);
     } catch (error) {
       return error;

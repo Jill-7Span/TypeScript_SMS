@@ -14,7 +14,7 @@ export class Auth {
   authOfBusiness = (req: Request, res: Response, next: NextFunction) => {
     const authorization = req.headers['authorization'];
     const tokenId = authorization && authorization.split(' ')[1];
-    jwt.verify(tokenId, env.SECRET_KEY, (error, business) => {
+    jwt.verify(tokenId as string, env.SECRET_KEY as string, (error, business) => {
       if (error) {
         return statusError(res, 401, error);
       }

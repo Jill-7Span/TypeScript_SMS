@@ -33,6 +33,6 @@ const templates = new mongoose.Schema(
     timestamps: { createdAt: true, updatedAt: true },
   }
 );
-const templatesModel = mongoose.model('templates', templates);
+const TemplatesModel = mongoose.model('templates', templates);
 
-export { templatesModel };
+export { TemplatesModel };

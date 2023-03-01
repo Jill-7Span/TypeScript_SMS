@@ -26,6 +26,6 @@ const tags = new mongoose.Schema(
     timestamps: { createdAt: true, updatedAt: true },
   }
 );
-const tagsModel = mongoose.model('tags', tags);
+const TagModel = mongoose.model('tags', tags);
 
-export { tagsModel };
+export { TagModel };

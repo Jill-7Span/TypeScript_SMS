@@ -19,13 +19,13 @@ export const getBusinessList = (emailSearch: String, numberSearch: String, size:
   }
 };
 
-export const businessData = (bodyData: any) => {
+export const businessData = (bodyData: any):Object => {
   try {
-    const condition = {
+    const condition:Object = {
       $or: [{ email: bodyData.email }, { contactNumber: bodyData.contactNumber }],
     };
     return condition;
-  } catch (error) {
+  } catch (error:any) {
     return error;
   }
 };
