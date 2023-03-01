@@ -7,7 +7,7 @@ export interface templateModel {
   businessId: String;
   createdAt: any;
   updatedAt: any;
-};
+}
 
 const templates = new mongoose.Schema(
   {
