@@ -5,14 +5,14 @@ export class Cache {
     public redisClient = Redis.createClient()
 
 
-    getCacheData = async (_id:String) => {
+    getCacheData = async (_id:String):Promise<string | Error | null> => {
         try {
             await this.redisClient.connect();
-            const cacheData = await this.redisClient.GET(`cacheData.${_id}`);
+            const cacheData:string|null = await this.redisClient.GET(`cacheData.${_id}`);
             console.log("Cache Hit");
             return cacheData;
         } catch (error) {
-            return error;
+            return error as Error;
         } finally {
             this.redisClient.quit();
         }

@@ -1,21 +1,18 @@
 import { Request, Response } from 'express';
 import { TagService } from './tagService';
-import { statusError, statusSuccess } from '../common/statusCodes';
+import { StatusCode } from '../common/statusCodes';
 
 export class TagController {
-  public tagService: TagService;
 
-  constructor() {
-    this.tagService = new TagService();
-  }
+  constructor(public tagService: TagService,) {}
 
   //  Find Tags
   findTags = async (req: Request, res: Response) => {
     try {
-      const businessId = req.business._id;
+      const businessId = res.locals.business;
       const tagName:any = req.query.tagName;
       const tagData = await this.tagService.findTags(tagName, businessId);
-      return statusSuccess(res, 200, tagData);
+      return StatusCode.success(res, 200, tagData);
     } catch (error) {
       return error;
     }
@@ -24,9 +21,9 @@ export class TagController {
   //  All Tags
   allTags = async (req: Request, res: Response) => {
     try {
-      const businessId = req.business._id;
+      const businessId = res.locals.business;
       const allTags = await this.tagService.allTags(businessId);
-      return statusSuccess(res, 200, allTags);
+      return StatusCode.success(res, 200, allTags);
     } catch (error) {
       return error;
     }
@@ -35,7 +32,7 @@ export class TagController {
   //  Create Tags
   createTag = async (req: Request, res: Response) => {
     try {
-      const businessId = req.business._id;
+      const businessId = res.locals.business;
       const { tagName } = req.body;
       const tagData = {
         tag: tagName,
@@ -43,7 +40,7 @@ export class TagController {
       };
       // const tagData = await helper.alreadyExistedTag(tagName, businessId);
       const newTag = await this.tagService.createTag(tagData);
-      return statusSuccess(res, 200, newTag);
+      return StatusCode.success(res, 200, newTag);
     } catch (error) {
       return error;
     }
@@ -54,9 +51,9 @@ export class TagController {
     try {
       const _id:any = req.query._id;
       const deletedTag = await this.tagService.deleteTag(_id);
-      return statusSuccess(res, 200, `Deleted Successfully ${deletedTag.tag}`);
+      return StatusCode.success(res, 200, `Deleted Successfully ${deletedTag.tag}`);
     } catch (error) {
-      return statusError(res, 500, error);
+      return StatusCode.error(res, 500, error);
     }
   };
 }

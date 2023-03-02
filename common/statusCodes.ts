@@ -1,20 +1,22 @@
 import { Response } from 'express';
 
 //  Status Codes
-export const statusError = (res: Response, statusCode: number, errors: any) => {
-  return res.status(statusCode).json({
-    statusCode: statusCode,
-    Message: errors.message || errors,
-  });
-};
+export class StatusCode {
+  public static error = (res: Response, statusCode: number, errors: any) => {
+    return res.status(statusCode).json({
+      statusCode: statusCode,
+      Message: errors.message || errors,
+    });
+  };
 
-export const statusSuccess = (res: Response, statusCode: number, data: any) => {
-  const key = res.req.route.path;
-  return res.status(statusCode).json({
-    statusCode: statusCode,
-    [key]: data, // Dynamic Key to JSON
-  });
-};
+  public static success = (res: Response, statusCode: number, data: any) => {
+    const key = res.req.route.path;
+    return res.status(statusCode).json({
+      statusCode: statusCode,
+      [key]: data, // Dynamic Key to JSON
+    });
+  };
+}
 
 // const code = {
 //   401: 'Unauthorized',

@@ -1,16 +1,4 @@
-const mongoose = require('mongoose');
-
-export interface contactModel {
-  _id: String;
-  firstName: String;
-  lastName: String;
-  contactNumber: Number;
-  email: String;
-  tagId: String;
-  businessId: String;
-  createdAt: any;
-  updatedAt: any;
-}
+import mongoose from 'mongoose';
 
 const contactsModel = new mongoose.Schema(
   {

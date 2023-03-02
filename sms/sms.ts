@@ -19,6 +19,3 @@ export class Sms {
 
   }
 }
-
-
-module.exports = router;

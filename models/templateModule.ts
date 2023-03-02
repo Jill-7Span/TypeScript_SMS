@@ -1,14 +1,5 @@
 const mongoose = require('mongoose');
 
-export interface templateModel {
-  _id: String;
-  template: String;
-  category: String;
-  businessId: String;
-  createdAt: any;
-  updatedAt: any;
-}
-
 const templates = new mongoose.Schema(
   {
     template: {

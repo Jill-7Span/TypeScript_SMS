@@ -1,20 +1,17 @@
 import { Cache } from '../cache/cacheRequest';
 import { TemplatesModel } from '../models/templateModule';
-import { checkData } from '../common/nullChecK';
+import { CheckData } from '../common/nullChecK';
 
 export class TemplateService {
-  public cache: Cache;
 
-  constructor() {
-    this.cache = new Cache();
-  }
+  constructor( public cache: Cache,) {}
 
   //  Read Template
   readTemplate = async (condition: any) => {
     try {
       const readTemplate = await TemplatesModel.find(condition).populate('businessId', '_id ');
       await this.cache.setCacheData(readTemplate.data.id, readTemplate.data);
-      return checkData(readTemplate);
+      return CheckData.nullCheck(readTemplate);
     } catch (error) {
       return error;
     }
@@ -25,7 +22,7 @@ export class TemplateService {
     try {
       const addedTemplate = await TemplatesModel.create(templateData);
       await this.cache.setCacheData(addedTemplate.data.id, addedTemplate.data);
-      return checkData(addedTemplate);
+      return CheckData.nullCheck(addedTemplate);
     } catch (error) {
       return error;
     }
@@ -39,7 +36,7 @@ export class TemplateService {
         { $set: { category, template, updatedAt } },
         { new: true }
       ); // new : true for send updated data
-      return checkData(data);
+      return CheckData.nullCheck(data);
     } catch (error) {
       return error;
     }
@@ -49,7 +46,7 @@ export class TemplateService {
   deleteTemplate = async (condition: any) => {
     try {
       const data = await TemplatesModel.deleteOne(condition);
-      return checkData(data);
+      return CheckData.nullCheck(data);
     } catch (error) {
       return error;
     }

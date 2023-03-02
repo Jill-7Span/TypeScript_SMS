@@ -1,14 +1,12 @@
-// null check function
-export const checkData = (data:any) => {
+export class CheckData {
+  // null check function
+  public static nullCheck = (data:any): null|Object => {
     if (data == null) {
-        return null;
+      return null;
     } else if (data._doc) {
-        return data._doc;
+      return data._doc;
     } else {
-        return data;
+      return data;
     }
-};
-
-
-
-
+  };
+}

@@ -1,7 +1,7 @@
 import cron from 'node-cron';
+import { Request, Response } from 'express';
 import { msg, test } from './test';
-import { statusSuccess } from '../common/statusCodes';
-import sms from '../sms/smsController';
+import { StatusCode } from '../common/statusCodes';
 
 export class CronController {
   cronSchedular = async (req: Request, res: Response) => {
@@ -12,7 +12,7 @@ export class CronController {
       console.log('---------------------');
       msg(message);
       const sendSms = test(req, res);
-      return statusSuccess(res, 200 ,sendSms);
+      return StatusCode.success(res, 200 ,sendSms);
     });
   };
 }

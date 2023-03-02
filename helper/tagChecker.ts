@@ -1,33 +1,37 @@
-import { Tags } from '../tag/tagService';
+import { TagService } from '../tag/tagService';
 
-const tags = new Tags();
+export class TagChecker {
+  static tagService: any;
 
-export const alreadyExistedTag = async (tagName: String, businessId: String) => {
-  try {
-    const existedTag = await tags.findTags(tagName, businessId);
-    if (!existedTag) {
-      const tag = {
-        tag: tagName,
-        businessId: businessId,
-      };
-      return tag;
-    } else {
-      return 'Already Existed Tag';
+  constructor(public tagService: TagService) {}
+
+  public static alreadyExistedTag = async (tagName: String, businessId: String) => {
+    try {
+      const existedTag = await this.tagService.findTags(tagName, businessId);
+      if (!existedTag) {
+        const tag = {
+          tag: tagName,
+          businessId: businessId,
+        };
+        return tag;
+      } else {
+        return 'Already Existed Tag';
+      }
+    } catch (error) {
+      return error;
     }
-  } catch (error) {
-    return error;
-  }
-};
+  };
 
-export const findTag = async (tagName: String, businessId: String) => {
-  try {
-    const existedTag = await tags.findTags(tagName, businessId);
-    if (existedTag) {
-      return existedTag;
-    } else {
-      return 'Not Found Tag';
+  public static findTag = async (tagName: String, businessId: String) => {
+    try {
+      const existedTag = await this.tagService.findTags(tagName, businessId);
+      if (existedTag) {
+        return existedTag;
+      } else {
+        return 'Not Found Tag';
+      }
+    } catch (error) {
+      return error;
     }
-  } catch (error) {
-    return error;
-  }
-};
+  };
+}

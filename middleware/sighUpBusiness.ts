@@ -2,7 +2,7 @@
 import { Request, Response ,NextFunction } from 'express';
 import { object, string as _string } from 'joi';
 import { sanitize } from "string-sanitizer";
-import { statusError } from "../common/statusCodes";
+import { StatusCode } from "../common/statusCodes";
 
 export const signUpBusiness = (req:Request, res:Response, next:NextFunction) => {
     const validation = object({
@@ -20,7 +20,7 @@ export const signUpBusiness = (req:Request, res:Response, next:NextFunction) => 
         .unknown(false);//.unknown(true)
     const { error } = validation.validate(req.body, { abortEarly: false });
     if (error) {
-        return statusError(res,400,error);
+        return StatusCode.error(res,400,error);
     } else {
         const bodyData = req.body;
         bodyData.firstName = sanitize.removeNumber(bodyData.firstName);

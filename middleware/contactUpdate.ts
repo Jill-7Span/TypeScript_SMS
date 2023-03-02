@@ -1,7 +1,7 @@
 // insert business
-import { Request, Response, NextFunction } from 'express';
 import Joi from 'joi';
-import { statusError } from '../common/statusCodes';
+import { Request, Response, NextFunction } from 'express';
+import { StatusCode } from '../common/statusCodes';
 
 export const updateBusiness = (req: Request, res: Response, next: NextFunction) => {
   const validation = Joi.object({
@@ -14,7 +14,7 @@ export const updateBusiness = (req: Request, res: Response, next: NextFunction) 
   }).unknown(false); //.unknown(true)
   const { error } = validation.validate(req.body, { abortEarly: false });
   if (error) {
-    return statusError(res, 400, error);
+    return StatusCode.error(res, 400, error);
   } else {
     console.log('Update Contact Data Validation Check Successfully');
     next();

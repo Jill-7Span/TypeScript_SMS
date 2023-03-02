@@ -1,13 +1,5 @@
 import mongoose from 'mongoose';
 
-export interface tagModel {
-  _id: String;
-  tag: String;
-  businessId: String;
-  createdAt: any;
-  updatedAt: any;
-};
-
 const tags = new mongoose.Schema(
   {
     tag: {

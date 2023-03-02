@@ -4,14 +4,7 @@ import { Auth } from '../middleware/authMiddleware';
 import { routes } from '../interface/routesInterface';
 
 export class Template implements routes {
-  public router = express.Router();
-  public auth: Auth;
-  public templateController: TemplateController;
-
-  constructor() {
-    this.auth = new Auth();
-    this.templateController = new TemplateController();
-  }
+  constructor(public router = express.Router(), public auth: Auth, public templateController: TemplateController) {}
 
   public inRoute() {
     this.router.get('/readTemplate', this.auth.authOfBusiness, this.templateController.addTemplate);
@@ -22,4 +15,4 @@ export class Template implements routes {
 
     this.router.delete('/deleteTemplate', this.auth.authOfBusiness, this.templateController.deleteTemplate);
   }
-};
+}

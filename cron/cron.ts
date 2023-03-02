@@ -13,8 +13,6 @@ export class Cron implements routes {
     this.auth = new Auth();
   }
   public inRoute() {
-    this.router.post('/cronSchedular', this.auth.authOfBusiness, cronController.cronSchedular);
+    this.router.post('/cronSchedular', this.auth.authOfBusiness, this.cronController.cronSchedular);
   }
 };
-
-// router.post("/test",  cronController.test);

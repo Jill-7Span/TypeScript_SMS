@@ -1,29 +1,23 @@
-import { Request, Response, NextFunction } from 'express';
-import model from '../models/db';
 import jwt from 'jsonwebtoken';
+import { Request, Response, NextFunction } from 'express';
 import { env } from '../common/env';
-import { statusError } from '../common/statusCodes';
+import { StatusCode } from '../common/statusCodes';
 
 export class Auth {
-  // public statusCode: StatusCode;
-
-  // constructor() {
-  //   this.statusCode = new StatusCode();
-  // }
 
   authOfBusiness = (req: Request, res: Response, next: NextFunction) => {
     const authorization = req.headers['authorization'];
     const tokenId = authorization && authorization.split(' ')[1];
     jwt.verify(tokenId as string, env.SECRET_KEY as string, (error, business) => {
       if (error) {
-        return statusError(res, 401, error);
+        return StatusCode.error(res, 401, error);
       }
       try {
         console.log('admin Middleware Check is Successfully');
-        req.business = business;
+        res.locals.business = business;
         next();
       } catch (error) {
-        return statusError(res, 500, error);
+        return StatusCode.error(res, 500, error);
       }
     });
   };
