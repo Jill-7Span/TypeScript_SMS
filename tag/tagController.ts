@@ -3,14 +3,13 @@ import { TagService } from './tagService';
 import { StatusCode } from '../common/statusCodes';
 
 export class TagController {
-
-  constructor(public tagService: TagService,) {}
+  constructor(public tagService: TagService) {}
 
   //  Find Tags
   findTags = async (req: Request, res: Response) => {
     try {
-      const businessId = res.locals.business;
-      const tagName:any = req.query.tagName;
+      const businessId: string = res.locals.business._id;
+      const tagName: string = req.query.tagName as string;
       const tagData = await this.tagService.findTags(tagName, businessId);
       return StatusCode.success(res, 200, tagData);
     } catch (error) {
@@ -21,7 +20,7 @@ export class TagController {
   //  All Tags
   allTags = async (req: Request, res: Response) => {
     try {
-      const businessId = res.locals.business;
+      const businessId: string = res.locals.business._id as string;
       const allTags = await this.tagService.allTags(businessId);
       return StatusCode.success(res, 200, allTags);
     } catch (error) {
@@ -32,8 +31,8 @@ export class TagController {
   //  Create Tags
   createTag = async (req: Request, res: Response) => {
     try {
-      const businessId = res.locals.business;
-      const { tagName } = req.body;
+      const businessId: string = res.locals.business._id;
+      const tagName: string = req.body;
       const tagData = {
         tag: tagName,
         businessId: businessId,
@@ -49,7 +48,7 @@ export class TagController {
   //  Delete Tags
   deleteTag = async (req: Request, res: Response) => {
     try {
-      const _id:any = req.query._id;
+      const _id: string = req.query._id as string;
       const deletedTag = await this.tagService.deleteTag(_id);
       return StatusCode.success(res, 200, `Deleted Successfully ${deletedTag.tag}`);
     } catch (error) {

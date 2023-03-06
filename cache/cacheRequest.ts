@@ -5,20 +5,20 @@ export class Cache {
     public redisClient = Redis.createClient()
 
 
-    getCacheData = async (_id:String):Promise<string | Error | null> => {
+    public getCacheData = async (_id:String):Promise<cacheData> => {
         try {
             await this.redisClient.connect();
             const cacheData:string|null = await this.redisClient.GET(`cacheData.${_id}`);
             console.log("Cache Hit");
             return cacheData;
         } catch (error) {
-            return error as Error;
+           throw error as Error;
         } finally {
             this.redisClient.quit();
         }
     };
     
-    setCacheData = async (_id:String, newCacheData:Object) => {
+    public setCacheData = async (_id:String, newCacheData:Object) => {
         try {
             await this.redisClient.connect();
             const cacheData = await this.redisClient.SET(`cacheData.${_id}`, JSON.stringify(newCacheData));
@@ -26,19 +26,19 @@ export class Cache {
             console.log("Cache Miss And Set");
             return cacheData;
         } catch (error) {
-            return error;
+            throw error as Error;;
         } finally {
             this.redisClient.quit();
         }
     };
     
-    deleteCacheData = async (_id:String) => {
+    public deleteCacheData = async (_id:String) => {
         try {
             await this.redisClient.connect();
             await this.redisClient.DEL(`cacheData.${_id}`);
             console.log("Delete Cache");
         } catch (error) {
-            return error;
+            throw error as Error;;
         }finally{
             this.redisClient.quit();
         }

@@ -6,14 +6,13 @@ import { StatusCode } from '../common/statusCodes';
 import { TagService } from '../tag/tagService';
 import { TagChecker } from './tagChecker';
 
-export class CsvToJson {
-  static tagChecker: any;
-  constructor(public statusCode: StatusCode, public tags: TagService, public tagChecker: TagChecker) {}
+export class Convert {
+  constructor(public statusCode: StatusCode, public tags: TagService) {}
 
   public static csvToJson = async (req: Request, res: Response) => {
-    const businessId = res.locals.business;
-    const tagName = req.query.tags;
-    const tagId = await this.tagChecker.findTag(tagName, businessId);
+    const businessId: string = res.locals.business._id;
+    const tagName = req.query.tags as string;
+    const tagId = await TagChecker.findTag(tagName, businessId);
     const document = path.join(__dirname, `../temp/${req.file.originalname}`);
     const csvData = await csvtojson().fromFile(document);
     csvData.forEach((obj) => {

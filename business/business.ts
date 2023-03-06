@@ -4,7 +4,6 @@ import { Auth, loginBusiness, signUpBusiness, updateBusiness } from '../middlewa
 import { routes } from '../interface/routesInterface';
 
 export class Business implements routes {
-  
   constructor(public router = express.Router(), public businessController: BusinessController, public auth: Auth) {}
 
   public inRoute(): void {

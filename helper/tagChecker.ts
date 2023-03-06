@@ -1,11 +1,10 @@
 import { TagService } from '../tag/tagService';
 
 export class TagChecker {
-  static tagService: any;
-
+  static tagService: TagService;
   constructor(public tagService: TagService) {}
 
-  public static alreadyExistedTag = async (tagName: String, businessId: String) => {
+  public static alreadyExistedTag = async (tagName: string, businessId: string) => {
     try {
       const existedTag = await this.tagService.findTags(tagName, businessId);
       if (!existedTag) {
@@ -18,11 +17,11 @@ export class TagChecker {
         return 'Already Existed Tag';
       }
     } catch (error) {
-      return error;
+      throw error as Error;
     }
   };
 
-  public static findTag = async (tagName: String, businessId: String) => {
+  public static findTag = async (tagName: string, businessId: string) => {
     try {
       const existedTag = await this.tagService.findTags(tagName, businessId);
       if (existedTag) {
@@ -31,7 +30,7 @@ export class TagChecker {
         return 'Not Found Tag';
       }
     } catch (error) {
-      return error;
+      throw error as Error;
     }
   };
 }

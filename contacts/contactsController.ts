@@ -2,24 +2,15 @@ import { Request, Response } from 'express';
 import { ContactService } from './contactsService';
 import { TagService } from '../tag/tagService';
 import { StatusCode } from '../common/statusCodes';
-import { listOfNumbers } from '../helper/listOfNumbers';
-import { CsvToJson } from '../helper/csvToJson';
+import { NumbersList } from '../helper/listOfNumbers';
+import { Convert } from '../helper/csvToJson';
 import { Cache } from '../cache/cacheRequest';
-import { contactInterface } from './contactInterface';
 
 export class ContactController {
-  public cache: Cache;
-  public contactService: ContactService;
-  public tagService: TagService;
-
-  constructor() {
-    this.cache = new Cache();
-    this.contactService = new ContactService();
-    this.tagService = new TagService();
-  }
+  constructor(public cache: Cache, public contactService: ContactService, public tagService: TagService, public numbers : NumbersList) {}
 
   //  Find Contact
-  findContact = async (req: Request, res: Response) => {
+  public findContact = async (req: Request, res: Response) => {
     try {
       const _id: string = req.body._id;
       const cachedContact = await this.cache.getCacheData(_id);
@@ -27,7 +18,7 @@ export class ContactController {
         return StatusCode.success(res, 200, JSON.parse(cachedContact as string));
       } else {
         const contact = await this.contactService.findContact(_id);
-        await this.cache.setCacheData(_id, contact);
+        await this.cache.setCacheData(_id, contact as object);
         return StatusCode.success(res, 200, contact);
       }
     } catch (error) {
@@ -36,11 +27,11 @@ export class ContactController {
   };
 
   //  List Of Contacts
-  allContacts = async (req: Request, res: Response) => {
+  public allContacts = async (req: Request, res: Response) => {
     try {
       const businessId: string = res.locals.business;
-      const searchTags = req.query;
-      const condition = await listOfNumbers(searchTags, businessId);
+      const searchTags: string = req.query.searchTags as string;
+      const condition = await this.numbers.listOfNumbers(searchTags, businessId) as NumberListInterface;
       const allContacts = await this.contactService.allContacts(condition);
       return StatusCode.success(res, 200, allContacts);
     } catch (error) {
@@ -49,9 +40,9 @@ export class ContactController {
   };
 
   //  CSV Upload
-  csvUpload = async (req: Request, res: Response) => {
+  public csvUpload = async (req: Request, res: Response) => {
     try {
-      const csvData = await CsvToJson.csvToJson(req, res);
+      const csvData = await Convert.csvToJson(req, res);
       const csv = await this.contactService.csvUpload(csvData);
       return StatusCode.success(res, 201, csv);
     } catch (error) {
@@ -60,21 +51,23 @@ export class ContactController {
   };
 
   // Update Contact
-  updateContact = async (req: Request, res: Response) => {
+  public updateContact = async (req: Request, res: Response) => {
     try {
-      const businessId:string = res.locals.business;
-      const bodyData:Partial<contactInterface> = req.body;
+      const businessId: string = res.locals.business;
+      const bodyData: Partial<contactInterface> = req.body;
       const updatedAt = new Date();
-      const updatedContact = await this.contactService.updateContact(businessId, bodyData, updatedAt);
-      await this.cache.setCacheData(updatedContact._id, updatedContact);
-      return StatusCode.success(res, 200, updatedContact);
+      const updatedContact = await this.contactService.updateContact(businessId, bodyData, updatedAt) as contactInterface ;
+      if (updatedContact && updatedContact != null) {
+        await this.cache.setCacheData(updatedContact._id, updatedContact);  
+        return StatusCode.success(res, 200, updatedContact);
+      } 
     } catch (error) {
       return StatusCode.error(res, 500, error);
     }
   };
 
   // Update Contact Tags
-  updateContactTags = async (req: Request, res: Response) => {
+  public updateContactTags = async (req: Request, res: Response) => {
     try {
       const businessId = res.locals.business;
       const { _id, tagName } = req.body;
@@ -87,7 +80,7 @@ export class ContactController {
   };
 
   // Delete Contact
-  deleteContact = async (req: Request, res: Response) => {
+  public deleteContact = async (req: Request, res: Response) => {
     try {
       const _id = req.query._id;
       const deletedContact = await this.contactService.deleteContact(_id);

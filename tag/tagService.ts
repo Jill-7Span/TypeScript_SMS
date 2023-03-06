@@ -2,45 +2,44 @@ import { CheckData } from '../common/nullChecK';
 import { TagModel } from '../models/tagsModel';
 
 export class TagService {
-    
   //  Find Tag
-  findTags = async (tagName:String, businessId:String) => {
+  public findTags = async (tagName: string, businessId: string): Promise<TagData> => {
     try {
-      const tags = await TagModel.findOne({ $and: [{ tag: tagName }, { businessId }] });
+      const tags: TagModelInterface | null = await TagModel.findOne({ $and: [{ tag: tagName }, { businessId }] });
       return CheckData.nullCheck(tags);
     } catch (error) {
-      return error;
+      return error as Error;
     }
   };
 
   //  All Tags
-  allTags = async (businessId:String) => {
+  public allTags = async (businessId: String): Promise<TagArrayInterface[] | null> => {
     try {
-      const allTags = await TagModel.find({ businessId });
+      const allTags: TagArrayInterface[] = await TagModel.find({ businessId });
       return CheckData.nullCheck(allTags);
     } catch (error) {
-      return error;
+      throw error as Error;
     }
   };
 
   //  Create Tag
-  createTag = async (tagData:Object) => {
+  public createTag = async (tagData: { tag: string; businessId: string }): Promise<TagModelInterface | null> => {
     try {
-      const newTagsData = await TagModel.create(tagData);
+      const newTagsData: TagModelInterface = await TagModel.create(tagData);
       // await tagCache.setCacheData(CheckData.nullCheck.id, CheckData.nullCheck);
       return CheckData.nullCheck(newTagsData);
     } catch (error) {
-      return error;
+      throw error as Error;;
     }
   };
 
   //  Delete Tag
-  deleteTag = async (_id:String) => {
+  public deleteTag = async (_id: String) => {
     try {
       const data = await TagModel.findByIdAndDelete(_id);
       return CheckData.nullCheck(data);
     } catch (error) {
-      return error;
+      throw error as Error;;
     }
   };
 }

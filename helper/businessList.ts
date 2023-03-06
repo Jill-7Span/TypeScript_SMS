@@ -1,8 +1,8 @@
 export class BusinessList {
   
-  public static searchInBusiness = (emailSearch?: String, numberSearch?: String, size?: string, page?: string) => {
+  public static searchInBusiness = (emailSearch?: string, numberSearch?: string, size?: string, page?: string):SearchInBusiness => {
     try {
-      let condition = {};
+      let condition:SearchInBusiness = {};
       if (emailSearch || numberSearch) {
         condition = {
           $or: [{ email: { $regex: emailSearch } }, { contactNumber: { $regex: numberSearch } }],
@@ -17,18 +17,18 @@ export class BusinessList {
       }
       return condition;
     } catch (error) {
-      return error;
+      throw error as Error;;
     }
   };
 
-  public static listOfBusiness = (email: string, contactNumber: string) => {
+  public static listOfBusiness = (email: string, contactNumber: string):ListOfBusiness|Error => {
     try {
-      const condition = {
+      const condition:ListOfBusiness = {
         $or: [{ email }, { contactNumber }],
       };
       return condition;
-    } catch (error: any) {
-      return error;
+    } catch (error) {
+      throw error as Error;
     }
   };
 }

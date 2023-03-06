@@ -4,7 +4,7 @@ import { env } from './env';
 
 export class TokenJwt {
   // jwt token
-  public static tokenJwt = (business: any): String => {
+  public token = (business: any): String => {
     const tokenData: jwtInterface = {
       _id: business._id,
       role: business.role,

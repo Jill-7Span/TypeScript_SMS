@@ -5,14 +5,8 @@ import { csvUpload } from '../helper/contactUpload';
 import { Auth } from '../middleware/authMiddleware';
 
 export class Contact implements routes {
-  public router = express.Router();
-  public auth: Auth;
-  public contactsController: ContactController;
-
-  constructor() {
-    this.contactsController = new ContactController();
-    this.auth = new Auth();
-  }
+  constructor(public router = express.Router(), public auth: Auth, public contactsController: ContactController) {}
+  
   public inRoute() {
     this.router.get('/findContact', this.auth.authOfBusiness, this.contactsController.findContact);
 
@@ -26,4 +20,4 @@ export class Contact implements routes {
 
     this.router.delete('/deleteContact', this.auth.authOfBusiness, this.contactsController.deleteContact);
   }
-};
+}

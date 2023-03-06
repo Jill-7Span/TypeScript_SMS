@@ -27,7 +27,7 @@ const businessModel = new mongoose.Schema(
       // unique: true,
       trim: true,
     },
-    password: {
+    password: { 
       type: String,
       require: true,
       trim: true,

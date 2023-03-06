@@ -4,7 +4,7 @@ import { msg, test } from './test';
 import { StatusCode } from '../common/statusCodes';
 
 export class CronController {
-  cronSchedular = async (req: Request, res: Response) => {
+  public cronSchedular = async (req: Request, res: Response) => {
     console.log('hello in cronSchedular');
     const { sec, min, hrs, day, month, dow, message }: any = req.body;
 

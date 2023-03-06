@@ -3,8 +3,7 @@ import { TemplatesModel } from '../models/templateModule';
 import { CheckData } from '../common/nullChecK';
 
 export class TemplateService {
-
-  constructor( public cache: Cache,) {}
+  constructor(public cache: Cache) {}
 
   //  Read Template
   readTemplate = async (condition: any) => {
@@ -13,7 +12,7 @@ export class TemplateService {
       await this.cache.setCacheData(readTemplate.data.id, readTemplate.data);
       return CheckData.nullCheck(readTemplate);
     } catch (error) {
-      return error;
+      throw error as Error;;
     }
   };
 
@@ -24,7 +23,7 @@ export class TemplateService {
       await this.cache.setCacheData(addedTemplate.data.id, addedTemplate.data);
       return CheckData.nullCheck(addedTemplate);
     } catch (error) {
-      return error;
+      throw error as Error;;
     }
   };
 
@@ -38,7 +37,7 @@ export class TemplateService {
       ); // new : true for send updated data
       return CheckData.nullCheck(data);
     } catch (error) {
-      return error;
+      throw error as Error;;
     }
   };
 
@@ -48,7 +47,7 @@ export class TemplateService {
       const data = await TemplatesModel.deleteOne(condition);
       return CheckData.nullCheck(data);
     } catch (error) {
-      return error;
+      throw error as Error;;
     }
   };
 }

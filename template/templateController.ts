@@ -11,9 +11,9 @@ export class TemplateController {
     public findTemplate: FindTemplate
   ) {}
   //  Read Template
-  readTemplate = async (req: Request, res: Response) => {
+  public readTemplate = async (req: Request, res: Response) => {
     try {
-      const condition = await this.findTemplate.findTemplate(req,res);
+      const condition = await this.findTemplate.findTemplate(req, res);
       const readTemplate = await this.templateService.readTemplate(condition);
       return StatusCode.success(res, 200, readTemplate);
     } catch (error) {
@@ -22,7 +22,7 @@ export class TemplateController {
   };
 
   //  Add Template
-  addTemplate = async (req: Request, res: Response) => {
+  public addTemplate = async (req: Request, res: Response) => {
     try {
       const { template, category } = req.body;
       const massage = this.filter.clean(template);
@@ -39,7 +39,7 @@ export class TemplateController {
   };
 
   //  Update Template
-  updateTemplate = async (req: Request, res: Response) => {
+  public updateTemplate = async (req: Request, res: Response) => {
     try {
       const businessId = res.locals.business;
       const { _id, category, template } = req.query;
@@ -52,7 +52,7 @@ export class TemplateController {
   };
 
   //  Delete Template
-  deleteTemplate = async (req: Request, res: Response) => {
+  public deleteTemplate = async (req: Request, res: Response) => {
     try {
       const _id = req.query._id;
       const businessId = res.locals.business;

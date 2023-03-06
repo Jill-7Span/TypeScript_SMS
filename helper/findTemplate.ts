@@ -1,10 +1,9 @@
 import { Request, Response } from 'express';
-import { templateSearch } from '../template/templateInterface';
 export class FindTemplate {
-  findTemplate = async (req: Request, res:Response): Promise<Object> => {
-    const businessId: String = res.locals.business;
+  findTemplate = async (req: Request, res:Response):Promise<FindTemplateInterface>=> {
+    const businessId : string = res.locals.business._id;
     const { templateId, search }: templateSearch = req.query;
-    let condition: Object = {};
+    let condition:FindTemplateInterface = {};
     if (search) {
       condition = {
         $and: [
