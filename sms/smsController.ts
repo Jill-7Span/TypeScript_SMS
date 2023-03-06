@@ -19,7 +19,7 @@ export class SmsController {
     public templateService: TemplateService,
   ) {}
 
-  sendSms = async (req: Request, res: Response) => {
+  public sendSms = async (req: Request, res: Response) => {
     try {
       const businessId = res.locals.business;
       const { searchTags } = req.body;
@@ -27,7 +27,7 @@ export class SmsController {
       const allContacts = await this.contactService.allContacts(contactCondition);
       const templateContact = await this.findTemplate.findTemplate(req,res);
       const smsTemplate = await this.templateService.readTemplate(templateContact);
-      const numberList = allContacts.map(({ contactNumber }: any) => contactNumber);
+      const numberList = allContacts!.map(({ contactNumber }: any) => contactNumber);
       const smsDetails = {
         message: smsTemplate[0].template,
         number: numberList,
@@ -38,7 +38,7 @@ export class SmsController {
     }
   };
 
-  test = async (req: Request, res: Response) => {
+  public test = async (req: Request, res: Response) => {
     try {
       const sms = await client.messages.create({
         to: ['+919722030839'],

@@ -13,10 +13,10 @@ export class ContactService {
   };
 
   //  List of Contact
-  public allContacts = async (condition:NumberListInterface):Promise<C> => {
+  public allContacts = async (condition:NumberListInterface):Promise<F> => {
     try {
       // .populate("businessId","-_id firstName lastName");  to populate business data
-      const data:contactInterface[] = await ContactsModel.find(condition).populate('tagId', '-_id tag') as contactInterface[]; 
+      const data = await ContactsModel.find(condition).populate('tagId', '-_id tag') as contactInterface[]; 
       return CheckData.nullCheck(data);
     } catch (error) {
       throw error as Error;

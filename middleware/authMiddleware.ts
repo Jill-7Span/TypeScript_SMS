@@ -5,7 +5,7 @@ import { StatusCode } from '../common/statusCodes';
 
 export class Auth {
 
-  authOfBusiness = (req: Request, res: Response, next: NextFunction) => {
+  public authOfBusiness = (req: Request, res: Response, next: NextFunction) => {
     const authorization = req.headers['authorization'];
     const tokenId = authorization && authorization.split(' ')[1];
     jwt.verify(tokenId as string, env.SECRET_KEY as string, (error, business) => {

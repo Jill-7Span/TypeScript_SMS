@@ -6,7 +6,7 @@ export class TagController {
   constructor(public tagService: TagService) {}
 
   //  Find Tags
-  findTags = async (req: Request, res: Response) => {
+  public findTags = async (req: Request, res: Response) => {
     try {
       const businessId: string = res.locals.business._id;
       const tagName: string = req.query.tagName as string;
@@ -18,7 +18,7 @@ export class TagController {
   };
 
   //  All Tags
-  allTags = async (req: Request, res: Response) => {
+  public allTags = async (req: Request, res: Response) => {
     try {
       const businessId: string = res.locals.business._id as string;
       const allTags = await this.tagService.allTags(businessId);
@@ -29,7 +29,7 @@ export class TagController {
   };
 
   //  Create Tags
-  createTag = async (req: Request, res: Response) => {
+  public createTag = async (req: Request, res: Response) => {
     try {
       const businessId: string = res.locals.business._id;
       const tagName: string = req.body;
@@ -46,7 +46,7 @@ export class TagController {
   };
 
   //  Delete Tags
-  deleteTag = async (req: Request, res: Response) => {
+  public deleteTag = async (req: Request, res: Response) => {
     try {
       const _id: string = req.query._id as string;
       const deletedTag = await this.tagService.deleteTag(_id);

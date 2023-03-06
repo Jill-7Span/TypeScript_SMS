@@ -3,11 +3,15 @@ interface templateSearch {
   search?: string;
 }
 
-interface templateModel {
-  _id: string;
+interface TemplateModelInterface {
+  _id: Types.ObjectId | string;
   template: string;
   category: string;
   businessId: string;
-  createdAt: any;
-  updatedAt: any;
+  createdAt: Date;
+  updatedAt: Date;
 }
+
+type ABC = TemplateModelInterface | null
+
+type TemplateData = ABC | E

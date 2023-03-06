@@ -6,10 +6,9 @@ export class TemplateService {
   constructor(public cache: Cache) {}
 
   //  Read Template
-  readTemplate = async (condition: any) => {
+  public readTemplate = async (condition: any):Promise<TemplateData> => {
     try {
-      const readTemplate = await TemplatesModel.find(condition).populate('businessId', '_id ');
-      await this.cache.setCacheData(readTemplate.data.id, readTemplate.data);
+      const readTemplate:Partial<TemplateModelInterface>|null = await TemplatesModel.find(condition).populate('businessId', '_id ');
       return CheckData.nullCheck(readTemplate);
     } catch (error) {
       throw error as Error;;
@@ -17,7 +16,7 @@ export class TemplateService {
   };
 
   //  Add Template
-  addTemplate = async (templateData: any) => {
+  public addTemplate = async (templateData: any) => {
     try {
       const addedTemplate = await TemplatesModel.create(templateData);
       await this.cache.setCacheData(addedTemplate.data.id, addedTemplate.data);
@@ -28,7 +27,7 @@ export class TemplateService {
   };
 
   //  Update Template
-  updateTemplate = async (_id: String, businessId: String, category: String, template: String, updatedAt: String) => {
+  public updateTemplate = async (_id: String, businessId: String, category: String, template: String, updatedAt: String) => {
     try {
       const data = await TemplatesModel.findOneAndUpdate(
         { $and: [{ _id }, { businessId }] },
@@ -42,7 +41,7 @@ export class TemplateService {
   };
 
   //  Delete Template
-  deleteTemplate = async (condition: any) => {
+  public deleteTemplate = async (condition: any) => {
     try {
       const data = await TemplatesModel.deleteOne(condition);
       return CheckData.nullCheck(data);
