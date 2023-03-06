@@ -34,9 +34,9 @@ export class ContactService {
   };
 
   //  Update Contact Tags
-  public updateContactTags = async (_id, tagsId) => {
+  public updateContactTags = async (_id:string, tagId:string) => {
     try {
-      const updatedContact = await contactsModel.updateMany({ _id: { $in: _id } }, { $set: { tagId: tagsId } });
+      const updatedContact = await ContactsModel.updateMany({ _id: { $in: _id } }, { $set: { tagId } });
       // await contactsCache.setCacheData(CheckData.nullCheck.id, CheckData.nullCheck);
       return CheckData.nullCheck(updatedContact);
     } catch (error) {
@@ -62,7 +62,7 @@ export class ContactService {
   //  Delete Contact
   public deleteContact = async (_id: string) => {
     try {
-      const data = await contactsModel.findByIdAndDelete(_id);
+      const data = await ContactsModel.findByIdAndDelete(_id);
       return CheckData.nullCheck(data);
     } catch (error) {
       throw error as Error;;

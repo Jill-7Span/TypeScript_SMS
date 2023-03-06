@@ -9,7 +9,10 @@ interface contactInterface {
   createdAt?: Date;
   updatedAt?: Date;
 }
-
+interface TagUpdate {
+  _id:string,
+  tagName:string
+}
 type A = contactInterface | null;
 type B = Error;
 

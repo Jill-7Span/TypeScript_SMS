@@ -70,9 +70,9 @@ export class ContactController {
   public updateContactTags = async (req: Request, res: Response) => {
     try {
       const businessId = res.locals.business;
-      const { _id, tagName } = req.body;
+      const { _id, tagName }:TagUpdate = req.body;
       const tag = await this.tagService.findTags(tagName, businessId);
-      const updatedTag = await this.contactService.updateContactTags(_id, tag.tagName);
+      const updatedTag = await this.contactService.updateContactTags(_id, tag!.tagName);
       return StatusCode.success(res, 200, updatedTag);
     } catch (error) {
       return StatusCode.error(res, 500, error);
