@@ -3,7 +3,10 @@ import { TagService } from './tagService';
 import { StatusCode } from '../common/statusCodes';
 
 export class TagController {
-  constructor(public tagService: TagService) {}
+  public tagService: TagService
+  constructor() {
+    this.tagService = new TagService();
+  }
 
   //  Find Tags
   public findTags = async (req: Request, res: Response) => {
@@ -49,7 +52,7 @@ export class TagController {
   public deleteTag = async (req: Request, res: Response) => {
     try {
       const _id: string = req.query._id as string;
-      const deletedTag = await this.tagService.deleteTag(_id);
+      const deletedTag:any = await this.tagService.deleteTag(_id);
       return StatusCode.success(res, 200, `Deleted Successfully ${deletedTag.tag}`);
     } catch (error) {
       return StatusCode.error(res, 500, error);

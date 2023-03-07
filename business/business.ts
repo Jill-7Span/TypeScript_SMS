@@ -4,7 +4,13 @@ import { Auth, loginBusiness, signUpBusiness, updateBusiness } from '../middlewa
 import { routes } from '../interface/routesInterface';
 
 export class Business implements routes {
-  constructor(public router = express.Router(), public businessController: BusinessController, public auth: Auth) {}
+  public router = express.Router();
+  public auth: Auth;
+  public businessController: BusinessController;
+  constructor() {
+    this.auth = new Auth();
+    this.businessController = new BusinessController();
+  }
 
   public inRoute(): void {
     this.router.get('/business', this.auth.authOfBusiness, this.businessController.businessDetails);

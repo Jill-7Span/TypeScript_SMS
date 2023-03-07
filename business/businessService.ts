@@ -1,5 +1,6 @@
 import { CheckData } from '../common/nullChecK';
 import { BusinessModel } from '../models/businessModel';
+import { BusinessModelInterface ,B_Array } from './businessInterface';
 
 export class BusinessService {
   //get business
@@ -9,17 +10,17 @@ export class BusinessService {
       // .select is use to set password when in schema its select false`
       return CheckData.nullCheck<BusinessModelInterface>(data);
     } catch (error) {
-      throw error as Error;;
+      throw error as Error;
     }
   };
 
   // get Business
-  public searchInBusiness = async (condition:ListOfBusiness): Promise<B_Array[]> => {
+  public searchInBusiness = async (condition: any): Promise<B_Array[]> => {
     try {
       const data: B_Array[] = await BusinessModel.find(condition);
       return data;
     } catch (error) {
-      throw error as Error;;
+      throw error as Error;
     }
   };
 
@@ -29,7 +30,7 @@ export class BusinessService {
       const newBusinessData: BusinessModelInterface = await BusinessModel.create(data);
       return CheckData.nullCheck(newBusinessData) as BusinessModelInterface;
     } catch (error) {
-      throw error as Error;;
+      throw error as Error;
     }
   };
 
@@ -43,7 +44,7 @@ export class BusinessService {
       );
       return CheckData.nullCheck(data) as BusinessModelInterface;
     } catch (error) {
-      throw error as Error;;
+      throw error as Error;
     }
   };
 
@@ -52,7 +53,7 @@ export class BusinessService {
     try {
       return await BusinessModel.deleteOne({ _id });
     } catch (error) {
-      throw error as Error;;
+      throw error as Error;
     }
   };
 }

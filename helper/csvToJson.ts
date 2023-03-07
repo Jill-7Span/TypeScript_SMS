@@ -1,15 +1,20 @@
 import csvtojson from 'csvtojson';
 import path from 'path';
 import fs from 'fs';
-import { Request, Response } from 'express';
+import { Response } from 'express';
 import { StatusCode } from '../common/statusCodes';
 import { TagService } from '../tag/tagService';
 import { TagChecker } from './tagChecker';
 
 export class Convert {
-  constructor(public statusCode: StatusCode, public tags: TagService) {}
+  public statusCode: StatusCode;
+  public tags: TagService;
+  constructor() {
+    this.statusCode = new StatusCode();
+    this.tags = new TagService();
+  }
 
-  public static csvToJson = async (req: Request, res: Response) => {
+  public static csvToJson = async (req: any, res: Response) => {
     const businessId: string = res.locals.business._id;
     const tagName = req.query.tags as string;
     const tagId = await TagChecker.findTag(tagName, businessId);

@@ -1,12 +1,8 @@
-import { TagService } from '../tag/tagService';
-
 export class TagChecker {
-  static tagService: TagService;
-  constructor(public tagService: TagService) {}
 
   public static alreadyExistedTag = async (tagName: string, businessId: string) => {
     try {
-      const existedTag = await this.tagService.findTags(tagName, businessId);
+      const existedTag = await TagChecker.findTag (tagName, businessId);
       if (!existedTag) {
         const tag = {
           tag: tagName,
@@ -21,9 +17,9 @@ export class TagChecker {
     }
   };
 
-  public static findTag = async (tagName: string, businessId: string) => {
+  public static findTag = async (tagName: string, businessId: string):Promise<any> => {
     try {
-      const existedTag = await this.tagService.findTags(tagName, businessId);
+      const existedTag = await TagChecker.findTag(tagName, businessId);
       if (existedTag) {
         return existedTag;
       } else {

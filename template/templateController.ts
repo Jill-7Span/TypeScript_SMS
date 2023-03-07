@@ -5,11 +5,14 @@ import { StatusCode } from '../common/statusCodes';
 import { FindTemplate } from '../helper/findTemplate';
 
 export class TemplateController {
+  public filter = new Filter();
+  public templateService: TemplateService;
+  public findTemplate: FindTemplate;
   constructor(
-    public filter = new Filter(),
-    public templateService: TemplateService,
-    public findTemplate: FindTemplate
-  ) {}
+  ) {
+    this.templateService = new TemplateService();
+    this.findTemplate = new FindTemplate();
+  }
   //  Read Template
   public readTemplate = async (req: Request, res: Response) => {
     try {
@@ -42,8 +45,8 @@ export class TemplateController {
   public updateTemplate = async (req: Request, res: Response) => {
     try {
       const businessId = res.locals.business;
-      const { _id, category, template } = req.query;
-      const updatedAt = new Date();
+      const { _id, category, template }:any = req.query;
+      const updatedAt:any = new Date();
       const updatedTemplate = await this.templateService.updateTemplate(_id, businessId, category, template, updatedAt);
       return StatusCode.success(res, 200, updatedTemplate);
     } catch (error) {

@@ -1,9 +1,11 @@
-interface templateSearch {
+import { E } from "../tag/tagInterface";
+
+export interface templateSearch {
   templateId?: string;
   search?: string;
 }
 
-interface TemplateModelInterface {
+export interface TemplateModelInterface {
   _id: Types.ObjectId | string;
   template: string;
   category: string;
@@ -12,6 +14,6 @@ interface TemplateModelInterface {
   updatedAt: Date;
 }
 
-type ABC = TemplateModelInterface | null
+export type ABC = TemplateModelInterface | null
 
-type TemplateData = ABC | E
+export type TemplateData = ABC | E

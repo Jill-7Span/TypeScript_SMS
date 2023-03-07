@@ -3,7 +3,13 @@ import { SmsController } from './smsController';
 import { Auth } from '../middleware/authMiddleware';
 
 export class Sms {
-  constructor(public router = express.Router(), public smsController: SmsController, public auth: Auth) {}
+  public router = express.Router();
+  public auth: Auth;
+  public smsController: SmsController;
+  constructor() {
+    this.auth = new Auth();
+    this.smsController = new SmsController();
+  }
 
   public inRoute() {
     this.router.get('/testSms', this.smsController.test);

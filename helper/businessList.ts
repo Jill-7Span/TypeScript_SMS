@@ -1,3 +1,5 @@
+import { ListOfBusiness, SearchInBusiness } from "./helperInterface";
+
 export class BusinessList {
   
   public static searchInBusiness = (emailSearch?: string, numberSearch?: string, size?: string, page?: string):SearchInBusiness => {

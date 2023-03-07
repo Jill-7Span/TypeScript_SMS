@@ -12,21 +12,27 @@ const authToken = 'd55d0c4dd3d49ae4976ee1fbe98eb5bb';
 const client = require('twilio')(accountSid, authToken);
 
 export class SmsController {
+  public contactService: ContactService;
+    public numberList: NumbersList;
+    public findTemplate: FindTemplate;
+    public templateService: TemplateService;
   constructor(
-    public contactService: ContactService,
-    public numberList: NumbersList,
-    public findTemplate: FindTemplate,
-    public templateService: TemplateService,
-  ) {}
+    
+  ) {
+    this.contactService = new ContactService();
+    this.numberList = new NumbersList();
+    this.findTemplate = new FindTemplate();
+    this.templateService = new TemplateService();
+  }
 
   public sendSms = async (req: Request, res: Response) => {
     try {
       const businessId = res.locals.business;
       const { searchTags } = req.body;
       const contactCondition = await this.numberList.listOfNumbers(searchTags, businessId);
-      const allContacts = await this.contactService.allContacts(contactCondition);
+      const allContacts:any = await this.contactService.allContacts(contactCondition);
       const templateContact = await this.findTemplate.findTemplate(req,res);
-      const smsTemplate = await this.templateService.readTemplate(templateContact);
+      const smsTemplate:any = await this.templateService.readTemplate(templateContact);
       const numberList = allContacts!.map(({ contactNumber }: any) => contactNumber);
       const smsDetails = {
         message: smsTemplate[0].template,

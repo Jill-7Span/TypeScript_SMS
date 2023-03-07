@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
-import { jwtInterface } from './commanInterface';
+import { jwtInterface } from './commonInterface';
 import { env } from './env';
 
 export class TokenJwt {

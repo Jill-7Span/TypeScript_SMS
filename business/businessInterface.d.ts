@@ -1,22 +1,22 @@
-type Business = BusinessModel | null;
-type B_Array = BusinessModel[] | null
+export type Business = BusinessModel | null;
+export type B_Array = BusinessModel[] | null;
 
 type _Error = Error;
 
-type BusinessData = Business | _Error;
-type BusinessArray = B_Array | _Error;
+export type BusinessData = Business | _Error;
+export type BusinessArray = B_Array | _Error;
 
-interface logIn {
+export interface logIn {
   email: string;
   password: string;
 }
 
-  interface nameOfBusiness {
-    firstName:string,
-    lastName:string,
-  }
+export interface nameOfBusiness {
+  firstName: string;
+  lastName: string;
+}
 
-interface BusinessModelInterface {
+export interface BusinessModelInterface {
   _id: Types.ObjectId | string;
   firstName: string;
   lastName: string;

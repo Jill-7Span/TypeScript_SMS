@@ -1,16 +1,16 @@
-interface TagModelInterface {
+export interface TagModelInterface {
   _id?: Types.ObjectId | string;
   tag?: string;
   businessId?: string | Types.ObjectId;
   createdAt?: Date;
   updatedAt?: Date;
 }
-type T = TagModelInterface | null;
+export type T = TagModelInterface | null;
 type E = Error;
 
-type TagData = T | E;
+export type TagData = T | E;
 
-interface TagArrayInterface {
+export interface TagArrayInterface {
   _id?: Types.ObjectId | string;
   tag: string;
   businessId: string | Types.ObjectId;

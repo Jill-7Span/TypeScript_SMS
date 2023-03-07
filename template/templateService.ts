@@ -1,9 +1,13 @@
 import { Cache } from '../cache/cacheRequest';
 import { TemplatesModel } from '../models/templateModule';
 import { CheckData } from '../common/nullChecK';
+import { TemplateData, TemplateModelInterface } from './templateInterface';
 
 export class TemplateService {
-  constructor(public cache: Cache) {}
+  public cache: Cache;
+  constructor() {
+    this.cache = new Cache();
+  }
 
   //  Read Template
   public readTemplate = async (condition: any):Promise<TemplateData> => {

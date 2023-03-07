@@ -1,7 +1,6 @@
 import cron from 'node-cron';
 import { Request, Response } from 'express';
-import { msg, test } from './test';
-import { StatusCode } from '../common/statusCodes';
+import { msg } from './test';
 
 export class CronController {
   public cronSchedular = async (req: Request, res: Response) => {
@@ -11,8 +10,8 @@ export class CronController {
     await cron.schedule(`${sec} ${min} ${hrs} ${day} ${month} ${dow}`, () => {
       console.log('---------------------');
       msg(message);
-      const sendSms = test(req, res);
-      return StatusCode.success(res, 200 ,sendSms);
+      // const sendSms = test(req, res);
+      // return StatusCode.success(res, 200 ,sendSms);
     });
   };
 }

@@ -1,5 +1,6 @@
 import { CheckData } from '../common/nullChecK';
 import { TagModel } from '../models/tagsModel';
+import { TagArrayInterface, TagData, TagModelInterface } from './tagInterface';
 
 export class TagService {
   //  Find Tag

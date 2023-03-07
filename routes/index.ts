@@ -7,15 +7,21 @@ import { Cron } from '../cron/cron';
 import { Tag } from '../tag/tag';
 
 export class Routes {
-  constructor(
-    public router = express.Router(),
-    public business: Business,
-    public contact: Contact,
-    public template: Template,
-    public sms: Sms,
-    public cron: Cron,
-    public tag: Tag
-  ) {}
+  public router = express.Router();
+  public business: Business;
+  public contact: Contact;
+  public template: Template;
+  public sms: Sms;
+  public cron: Cron;
+  public tag: Tag;
+  constructor() {
+    this.business = new Business();
+    this.contact = new Contact();
+    this.template = new Template();
+    this.sms = new Sms();
+    this.cron = new Cron();
+    this.tag = new Tag();
+  }
   route() {
     // Routes
     this.router.use('/business', this.business.inRoute);

@@ -5,9 +5,20 @@ import { StatusCode } from '../common/statusCodes';
 import { NumbersList } from '../helper/listOfNumbers';
 import { Convert } from '../helper/csvToJson';
 import { Cache } from '../cache/cacheRequest';
+import { NumberListInterface } from '../helper/helperInterface';
+import { contactInterface, TagUpdate } from './contactInterface';
 
 export class ContactController {
-  constructor(public cache: Cache, public contactService: ContactService, public tagService: TagService, public numbers : NumbersList) {}
+  public cache: Cache;
+  public contactService: ContactService;
+  public tagService: TagService;
+  public numbers: NumbersList;
+  constructor() {
+    this.cache = new Cache();
+    this.contactService = new ContactService();
+    this.tagService = new TagService();
+    this.numbers = new NumbersList();
+  }
 
   //  Find Contact
   public findContact = async (req: Request, res: Response) => {
@@ -31,7 +42,7 @@ export class ContactController {
     try {
       const businessId: string = res.locals.business;
       const searchTags: string = req.query.searchTags as string;
-      const condition = await this.numbers.listOfNumbers(searchTags, businessId) as NumberListInterface;
+      const condition = (await this.numbers.listOfNumbers(searchTags, businessId)) as NumberListInterface;
       const allContacts = await this.contactService.allContacts(condition);
       return StatusCode.success(res, 200, allContacts);
     } catch (error) {
@@ -56,11 +67,15 @@ export class ContactController {
       const businessId: string = res.locals.business;
       const bodyData: Partial<contactInterface> = req.body;
       const updatedAt = new Date();
-      const updatedContact = await this.contactService.updateContact(businessId, bodyData, updatedAt) as contactInterface ;
+      const updatedContact = (await this.contactService.updateContact(
+        businessId,
+        bodyData,
+        updatedAt
+      )) as contactInterface;
       if (updatedContact && updatedContact != null) {
-        await this.cache.setCacheData(updatedContact._id, updatedContact);  
+        await this.cache.setCacheData(updatedContact._id, updatedContact);
         return StatusCode.success(res, 200, updatedContact);
-      } 
+      }
     } catch (error) {
       return StatusCode.error(res, 500, error);
     }
@@ -70,8 +85,8 @@ export class ContactController {
   public updateContactTags = async (req: Request, res: Response) => {
     try {
       const businessId = res.locals.business;
-      const { _id, tagName }:TagUpdate = req.body;
-      const tag = await this.tagService.findTags(tagName, businessId);
+      const { _id, tagName }: TagUpdate = req.body;
+      const tag:any = await this.tagService.findTags(tagName, businessId);
       const updatedTag = await this.contactService.updateContactTags(_id, tag!.tagName);
       return StatusCode.success(res, 200, updatedTag);
     } catch (error) {
@@ -82,8 +97,8 @@ export class ContactController {
   // Delete Contact
   public deleteContact = async (req: Request, res: Response) => {
     try {
-      const _id = req.query._id;
-      const deletedContact = await this.contactService.deleteContact(_id);
+      const _id = req.query._id as string;
+      const deletedContact:any  = await this.contactService.deleteContact(_id);
       await this.cache.deleteCacheData(_id);
       return StatusCode.success(
         res,

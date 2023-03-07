@@ -1,4 +1,4 @@
-interface contactInterface {
+export interface contactInterface {
   _id?: Types.ObjectId | string;
   firstName?: string;
   lastName?: string;
@@ -9,15 +9,15 @@ interface contactInterface {
   createdAt?: Date;
   updatedAt?: Date;
 }
-interface TagUpdate {
+export interface TagUpdate {
   _id:string,
   tagName:string
 }
 type A = contactInterface | null;
 type B = Error;
 
-type C = A | B;
+export type C = A | B;
 
-type D = contactInterface[] | null;
+export type D = contactInterface[] | null;
 
-type F = D | B
+export type F = D | B

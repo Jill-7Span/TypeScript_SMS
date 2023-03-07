@@ -1,7 +1,12 @@
+import { TagModelInterface } from '../tag/tagInterface';
 import { TagService } from '../tag/tagService';
+import { NumberListInterface } from './helperInterface';
 
 export class NumbersList {
-  constructor(public tagService: TagService) {}
+  public tagService: TagService;
+  constructor() {
+    this.tagService = new TagService();
+  }
   listOfNumbers = async (searchTags: string, businessId: string):Promise<NumberListInterface|Error> => {
     try {
       const tagId = await this.tagService.findTags(searchTags, businessId) as TagModelInterface;

@@ -1,4 +1,5 @@
 import Redis from 'redis';
+import { cacheData } from './cacheInterface';
 
 export class Cache {
 

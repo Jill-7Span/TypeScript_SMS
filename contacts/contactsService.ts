@@ -1,5 +1,7 @@
 import { CheckData } from '../common/nullChecK';
+import { NumberListInterface } from '../helper/helperInterface';
 import { ContactsModel } from '../models/contactsModel';
+import { C, contactInterface, F } from './contactInterface';
 
 export class ContactService {
   //  Find Contact
@@ -24,7 +26,7 @@ export class ContactService {
   };
 
   //  Upload CSV
-  public csvUpload = async (csvData) => {
+  public csvUpload = async (csvData:any) => {
     try {
       const newCsvData = await ContactsModel.create(csvData);
       return CheckData.nullCheck(newCsvData);

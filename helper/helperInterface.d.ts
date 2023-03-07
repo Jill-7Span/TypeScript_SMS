@@ -1,4 +1,4 @@
-interface SearchInBusiness {
+export interface SearchInBusiness {
   emailSearch?: string;
   numberSearch?: string;
   size?: string;
@@ -20,7 +20,7 @@ interface SearchInBusiness {
 //   contactNumber?:string,
 // }
 
-interface ListOfBusiness {
+export interface ListOfBusiness {
   $or: (
     | {
         email: string;
@@ -33,12 +33,12 @@ interface ListOfBusiness {
   )[];
 }
 
-interface NumberListInterface {
+export interface NumberListInterface {
   $and?: ({ businessId?: string} | { tagId?: string })[];
   [key: string]: any;
 }
 
-interface FindTemplateInterface  {
+export interface FindTemplateInterface  {
   $and?: {
     $or?: {
       template?: { $regex?: string },

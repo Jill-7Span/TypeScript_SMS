@@ -5,7 +5,13 @@ import { csvUpload } from '../helper/contactUpload';
 import { Auth } from '../middleware/authMiddleware';
 
 export class Contact implements routes {
-  constructor(public router = express.Router(), public auth: Auth, public contactsController: ContactController) {}
+  public router = express.Router();
+   public auth: Auth;
+    public contactsController: ContactController;
+  constructor() {
+    this.auth = new Auth();
+    this.contactsController = new ContactController();
+  }
   
   public inRoute() {
     this.router.get('/findContact', this.auth.authOfBusiness, this.contactsController.findContact);

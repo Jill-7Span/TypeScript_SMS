@@ -1,20 +1,29 @@
 import { Request, Response } from 'express';
 import { genSalt, hash, compare } from 'bcrypt';
-import { BusinessService} from './businessService';
+import { BusinessService } from './businessService';
 import { Cache } from '../cache/cacheRequest';
 import { StatusCode } from '../common/statusCodes';
 import { TokenJwt } from '../common/jwtCommon';
 import { BusinessList } from '../helper/businessList';
 import { changePassword, searchQuery } from '../interface/interface';
+import { BusinessModelInterface, logIn ,nameOfBusiness } from './businessInterface'
+import { ListOfBusiness } from '../helper/helperInterface'
 
 export class BusinessController {
-  constructor(public cache: Cache, public businessService: BusinessService, public jwt: TokenJwt) {}
+  public cache: Cache;
+  public businessService: BusinessService;
+  public jwt: TokenJwt;
+  constructor() {
+    this.cache = new Cache();
+    this.businessService = new BusinessService();
+    this.jwt = new TokenJwt();
+  }
 
   // get business
   public businessDetails = async (req: Request, res: Response) => {
     try {
-      // const businessId: String = typeof req.query.id === 'string' ? req.query.id : '';
-      const businessId = req.query.id as string;
+      const businessId = res.locals.business._id as string;
+      // const businessId = req.query.id as string;
 
       const businessCacheData = await this.cache.getCacheData(businessId);
 
@@ -52,7 +61,9 @@ export class BusinessController {
         if (bodyData.password === bodyData.confirmPassword) {
           const salt = await genSalt(10);
           bodyData.password = await hash(bodyData.password as string, salt);
-          const newBusiness: BusinessModelInterface = (await this.businessService.creteBusiness(bodyData)) as BusinessModelInterface;
+          const newBusiness: BusinessModelInterface = (await this.businessService.creteBusiness(
+            bodyData
+          )) as BusinessModelInterface;
           delete newBusiness.password;
           await this.cache.setCacheData(newBusiness._id as string, newBusiness);
           const token = this.jwt.token(newBusiness);
@@ -100,10 +111,12 @@ export class BusinessController {
   // update Business
   public businessUpdate = async (req: Request, res: Response) => {
     try {
-      const bodyData: Partial<businessModel> = req.body;
+      const bodyData: Partial<BusinessModelInterface> = req.body;
       const tokenId = res.locals.business._id;
-      const existingBusinessData = (await this.businessService.getBusinessData({ _id: tokenId })) as BusinessModelInterface;
-      let update: Partial<businessModel> = {};
+      const existingBusinessData = (await this.businessService.getBusinessData({
+        _id: tokenId,
+      })) as BusinessModelInterface;
+      let update: Partial<BusinessModelInterface> = {};
       const condition = BusinessList.listOfBusiness(bodyData.email as string, bodyData.contactNumber as string);
       const existingContactNumberOrEmail = (await this.businessService.searchInBusiness(
         condition as ListOfBusiness
@@ -145,9 +158,9 @@ export class BusinessController {
     try {
       const email: string = res.locals.business.email;
       const { oldPassword, newPassword, confirmPassword }: changePassword = req.body;
-      const update: Partial<businessModel> = {};
+      const update: Partial<BusinessModelInterface> = {};
       if (newPassword === confirmPassword) {
-        const business: C = await this.businessService.getBusinessData({ where: { email } });
+        const business = await this.businessService.getBusinessData({ where: { email } });
 
         if (business && business.password) {
           compare(oldPassword, business.password, async (error, data) => {

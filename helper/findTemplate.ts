@@ -1,4 +1,6 @@
 import { Request, Response } from 'express';
+import { templateSearch } from '../template/templateInterface';
+import { FindTemplateInterface } from './helperInterface';
 export class FindTemplate {
   findTemplate = async (req: Request, res:Response):Promise<FindTemplateInterface>=> {
     const businessId : string = res.locals.business._id;
