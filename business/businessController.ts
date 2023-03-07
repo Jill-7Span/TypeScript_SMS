@@ -1,20 +1,18 @@
 import { Request, Response } from 'express';
 import { genSalt, hash, compare } from 'bcrypt';
 import { BusinessService } from './businessService';
-import { Cache } from '../cache/cacheRequest';
+// import { getCacheData, setCacheData, deleteCacheData } from '../cache/cacheRequest';
 import { StatusCode } from '../common/statusCodes';
 import { TokenJwt } from '../common/jwtCommon';
 import { BusinessList } from '../helper/businessList';
 import { changePassword, searchQuery } from '../interface/interface';
-import { BusinessModelInterface, logIn ,nameOfBusiness } from './businessInterface'
-import { ListOfBusiness } from '../helper/helperInterface'
+import { BusinessModelInterface, logIn, nameOfBusiness } from './businessInterface';
+import { ListOfBusiness } from '../helper/helperInterface';
 
 export class BusinessController {
-  public cache: Cache;
   public businessService: BusinessService;
   public jwt: TokenJwt;
   constructor() {
-    this.cache = new Cache();
     this.businessService = new BusinessService();
     this.jwt = new TokenJwt();
   }
@@ -25,15 +23,15 @@ export class BusinessController {
       const businessId = res.locals.business._id as string;
       // const businessId = req.query.id as string;
 
-      const businessCacheData = await this.cache.getCacheData(businessId);
+      // const businessCacheData = await getCacheData(businessId);
 
-      if (businessCacheData != null) {
-        return StatusCode.success(res, 200, JSON.parse(businessCacheData as string));
-      } else {
+      // if (businessCacheData != null) {
+      //   return StatusCode.success(res, 200, JSON.parse(businessCacheData as string));
+      // } else {
         const existingBusiness: object | null = await this.businessService.getBusinessData({ _id: businessId });
-        await this.cache.setCacheData(businessId, existingBusiness as Object);
+        // await setCacheData(businessId, existingBusiness as Object);
         return StatusCode.success(res, 200, existingBusiness);
-      }
+      // }
     } catch (error) {
       return StatusCode.error(res, 500, error);
     }
@@ -65,7 +63,7 @@ export class BusinessController {
             bodyData
           )) as BusinessModelInterface;
           delete newBusiness.password;
-          await this.cache.setCacheData(newBusiness._id as string, newBusiness);
+          // await setCacheData(newBusiness._id as string, newBusiness);
           const token = this.jwt.token(newBusiness);
           const newBusinessDetail = { ...newBusiness, token };
           return StatusCode.success(res, 201, newBusinessDetail);
@@ -145,7 +143,7 @@ export class BusinessController {
         existingBusinessData._id,
         update
       )) as BusinessModelInterface;
-      await this.cache.setCacheData(updatedData._id, updatedData);
+      // await setCacheData(updatedData._id, updatedData);
       const token = this.jwt.token(updatedData);
       return StatusCode.success(res, 200, { ...updatedData, token });
     } catch (error) {
@@ -190,7 +188,7 @@ export class BusinessController {
     try {
       const _id: string = res.locals.business;
       await this.businessService.deleteBusiness(_id);
-      await this.cache.deleteCacheData(_id);
+      // await deleteCacheData(_id);
       return StatusCode.error(res, 200, 'Deleted');
     } catch (error) {
       return StatusCode.error(res, 500, error);

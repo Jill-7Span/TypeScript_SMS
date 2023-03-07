@@ -1,13 +1,9 @@
-import { Cache } from '../cache/cacheRequest';
+// import { Cache } from '../cache/cacheRequest';
 import { TemplatesModel } from '../models/templateModule';
 import { CheckData } from '../common/nullChecK';
 import { TemplateData, TemplateModelInterface } from './templateInterface';
 
 export class TemplateService {
-  public cache: Cache;
-  constructor() {
-    this.cache = new Cache();
-  }
 
   //  Read Template
   public readTemplate = async (condition: any):Promise<TemplateData> => {
@@ -23,7 +19,7 @@ export class TemplateService {
   public addTemplate = async (templateData: any) => {
     try {
       const addedTemplate = await TemplatesModel.create(templateData);
-      await this.cache.setCacheData(addedTemplate.data.id, addedTemplate.data);
+      // await setCacheData(addedTemplate.data.id, addedTemplate.data);
       return CheckData.nullCheck(addedTemplate);
     } catch (error) {
       throw error as Error;;
